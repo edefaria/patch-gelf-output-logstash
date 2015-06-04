@@ -47,11 +47,13 @@ gem_update () {
     [ -f $home/VERSION ] && echo $version > $home/VERSION
     sed -i "s/\(s\.version .*= \).*/\1'$version'/g" $gem_name.gemspec || { echo "version modification failed on filed $PWD/$gem_name.gemspec" ; exit 1 ; }
   fi
-  if [ -x "vendor/jruby/bin/gem" ] ; then
-    local gem_cmd="./vendor/jruby/bin/gem"
-  else
-    which gem 2>1 >/dev/null || { echo "command gem not found! Please install gem package!" ; exit 1 ; }
+  if which gem 2>1 >/dev/null ; then
     local gem_cmd="gem"
+  elif [ -x "$LOGSTASH_HOME/vendor/jruby/bin/gem" ] ; then
+    local gem_cmd="$LOGSTASH_HOME/vendor/jruby/bin/gem"
+  else
+    echo "command gem not found! Please install gem package!"
+    exit 1
   fi
   echo "exec in $PWD: $gem_cmd build $gem_name.gemspec"
   $gem_cmd build $gem_name.gemspec

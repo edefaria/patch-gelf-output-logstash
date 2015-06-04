@@ -47,6 +47,7 @@ gem_update () {
     [ -f $home/VERSION ] && echo $version > $home/VERSION
     sed -i "s/\(s\.version .*= \).*/\1'$version'/g" $gem_name.gemspec || { echo "version modification failed on filed $PWD/$gem_name.gemspec" ; exit 1 ; }
   fi
+  which gem 2>1 >/dev/null || { echo "command gem not found! Please install gem package!" ; exit 1 ; }
   echo "exec in $PWD: gem build $gem_name.gemspec"
   gem build $gem_name.gemspec
   cd $LOGSTASH_HOME

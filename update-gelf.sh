@@ -49,6 +49,8 @@ gem_update () {
   fi
   if which gem 2>1 >/dev/null ; then
     local gem_cmd="gem"
+  elif [ -x "/usr/bin/gem" ] ; then
+    local gem_cmd="/usr/bin/gem"
   elif [ -x "$LOGSTASH_HOME/vendor/jruby/bin/gem" ] ; then
     local gem_cmd="$LOGSTASH_HOME/vendor/jruby/bin/gem"
   else

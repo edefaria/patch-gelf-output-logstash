@@ -12,11 +12,11 @@ If your logstash installation differs from "/opt/logstash", please set ENV varia
 Example:
 logstash output configuration with gelf (TCP/TLS)
 
-output {
-  gelf {
-     host => "localhost"
-     port => "12202"
-     protocol => "tcp"
-     tls => "true"
-   }
-}
+    output {
+      gelf {
+         host => "localhost"
+         port => "12202"
+         protocol => "tcp"
+         tls => "true"
+       }
+    }

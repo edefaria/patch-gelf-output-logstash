@@ -8,3 +8,15 @@ To use it:
     $ bash patch/update-gelf.sh
 
 If your logstash installation differs from "/opt/logstash", please set ENV variable LOGSTASH_HOME or modify this variable in the begin of the script.
+
+Example:
+logstash output configuration with gelf (TCP/TLS)
+
+output {
+  gelf {
+     host => "localhost"
+     port => "12202"
+     protocol => "tcp"
+     tls => "true"
+   }
+}

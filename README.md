@@ -7,4 +7,4 @@ To use it:
     $ git clone https://github.com/edefaria/patch-logstash.git patch
     $ bash patch/update-gelf.sh
 
-If your logstash installation differs from "/opt/logstash", please set ENV variable LOGSTASH_HOME or modify this variable in the begin of the sript
+If your logstash installation differs from "/opt/logstash", please set ENV variable LOGSTASH_HOME or modify this variable in the begin of the script.

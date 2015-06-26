@@ -60,8 +60,8 @@ gem_version () {
       local $(grep 's\.version' $gem_name.gemspec |tr -d ' ' |sed -e 's/s\.version/version/' -e "s/'//g" -e 's/"//g')
     fi
   else
-    [ -f $home/VERSION ] && echo $version > $home/VERSION
-    sed -i "s/\(s\.version .*= \).*/\1'$version'/g" $gem_name.gemspec || { echo "version modification failed on filed $PWD/$gem_name.gemspec" ; exit 1 ; }
+    [ -f "$home/VERSION" ] && echo $version > $home/VERSION
+    sed -i "s/\(s\.version .*= \).*/\1'$version'/g" $gem_name.gemspec >/dev/null 2>/dev/null || { echo "version modification failed on filed $PWD/$gem_name.gemspec" ; exit 1 ; }
   fi
   echo $version
 }
@@ -87,15 +87,16 @@ gem_build () {
   $gem_cmd build $gem_name.gemspec
 }
 
-gem_install () {
+plugin_install () {
   local home="$1"
   local gem_name="$2"
   local git_clone_params="$3"
+  local action="$4"
   git_check "$home" "$gem_name" "$git_clone_params"
   version=$(gem_version "$home" "$gem_name" "$version")
   gem_build "$home" "$gem_name" "$version"
   cd $LOGSTASH_HOME
-  local action=install
+  [ -z $action ] && local action=install
   if [ -x "bin/plugin" ] ; then
     echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
     bin/plugin $action $home/$gem_name-$version.gem
@@ -103,6 +104,15 @@ gem_install () {
     echo "Error: plugin exec missing!"
     exit 1
   fi
+}
+
+plugin_update () {
+  local home="$1"
+  local gem_name="$2"
+  local git_clone_params="$3"
+  local version="$4"
+  version=$(gem_version "$home" "$gem_name" "$version")
+  plugin_install "$home" "$gem_name" "$git_clone_params" "update"
 }
 
 gem_update () {

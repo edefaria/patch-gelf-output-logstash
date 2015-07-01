@@ -24,14 +24,14 @@ gem_list () {
 }
 
 rake_update () {
-  pushd $LOGSTASH_HOME
+  pushd $LOGSTASH_HOME > /dev/null
   if [ -f "Rakefile" ] ; then
     echo "exec in $PWD: rake vendor:gems"
     rake vendor:gems
   else
-    echo "no source for rake update found."
+    echo "logstash package installation found, skipping rake"
   fi
-  popd
+  popd > /dev/null
 }
 
 git_check () {

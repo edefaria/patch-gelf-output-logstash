@@ -49,10 +49,43 @@ git_check () {
   fi
 }
 
+rubygems_update () {
+  if which gem 2>1 >/dev/null ; then
+    local gem_cmd="gem"
+  else
+    echo "command gem not found! Please install ruby/gem package!"
+    exit 1
+  fi
+  local gem_version="$($gem_cmd --version)"
+  if [[ "2.0.0" > "$gem_version" ]]; then
+    if [[ "1.5.1" < "$gem_version" ]]; then
+      REALLY_GEM_UPDATE_SYSTEM=1 $gem_cmd update --system
+      if [ "$?" != "0" ] ; then
+        $gem_cmd install rubygems-update
+        source /etc/profile
+        update_rubygems
+      fi
+    else
+      $gem_cmd install rubygems-update
+      source /etc/profile
+      update_rubygems
+    fi
+  fi
+}
+
+gem_get_version () {
+  local gem_name=$1
+  #Get first version of gem package asked
+  gem_list|grep -w "^$gem_name" |sed -r 's#^.*\((.*)\).*$#\1#'|cut -d ',' -f1
+}
+
 gem_version () {
   local home=$1
   local gem_name=$2
   local version=$3
+  if [ -z "$version" ] ; then
+    local version=$(gem_get_version $gem_name)
+  fi
   if [ -z "$version" ] ; then
     if [ -f "$home/VERSION" ] ; then
       local version=$(cat $home/VERSION)
@@ -96,7 +129,7 @@ plugin_install () {
   version=$(gem_version "$home" "$gem_name" "$version")
   gem_build "$home" "$gem_name" "$version"
   cd $LOGSTASH_HOME
-  [ -z $action ] && local action=install
+  [ -z "$action" ] && local action=install
   if [ -x "bin/plugin" ] ; then
     echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
     bin/plugin $action $home/$gem_name-$version.gem
@@ -113,6 +146,15 @@ plugin_update () {
   local version="$4"
   version=$(gem_version "$home" "$gem_name" "$version")
   plugin_install "$home" "$gem_name" "$git_clone_params" "update"
+}
+
+plugin_install_noverify () {
+  local home="$1"
+  local gem_name="$2"
+  local git_clone_params="$3"
+  local version="$4"
+  version=$(gem_version "$home" "$gem_name" "$version")
+  plugin_install "$home" "$gem_name" "$git_clone_params" "install --no-verify"
 }
 
 gem_update () {
@@ -138,12 +180,17 @@ gem_update () {
   fi
 }
 
+# Check rubygems version requirement
+rubygems_update
 
 # Install gelf-rb patched
-gem_update /opt/gelf-rb gelf "-b feature/tcp-tls --single-branch https://github.com/edefaria/gelf-rb.git" 1.3.2
+gem_update /opt/gelf-rb gelf "-b feature/tcp-tls --single-branch https://github.com/edefaria/gelf-rb.git"
 
 # Install logstash plugin output gelf patched
-gem_update /opt/logstash-output-gelf logstash-output-gelf "-b feature/tcp-tls --single-branch https://github.com/edefaria/logstash-output-gelf.git"
+plugin_install /opt/logstash-output-gelf logstash-output-gelf "-b feature/tcp-tls --single-branch https://github.com/edefaria/logstash-output-gelf.git"
+
+# Install logstash plugin codec gelf
+plugin_install /opt/logstash-codec-gelf logstash-codec-gelf "https://github.com/edefaria/logstash-codec-gelf.git"
 
 # Update Logstash dependencies
 rake_update

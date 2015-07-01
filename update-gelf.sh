@@ -126,7 +126,7 @@ plugin_install () {
   local git_clone_params="$3"
   local action="$4"
   git_check "$home" "$gem_name" "$git_clone_params"
-  version=$(gem_version "$home" "$gem_name" "$version")
+  local version=$(gem_version "$home" "$gem_name" "$version")
   gem_build "$home" "$gem_name" "$version"
   cd $LOGSTASH_HOME
   [ -z "$action" ] && local action=install
@@ -144,7 +144,7 @@ plugin_update () {
   local gem_name="$2"
   local git_clone_params="$3"
   local version="$4"
-  version=$(gem_version "$home" "$gem_name" "$version")
+  local version=$(gem_version "$home" "$gem_name" "$version")
   plugin_install "$home" "$gem_name" "$git_clone_params" "update"
 }
 
@@ -153,7 +153,7 @@ plugin_install_noverify () {
   local gem_name="$2"
   local git_clone_params="$3"
   local version="$4"
-  version=$(gem_version "$home" "$gem_name" "$version")
+  local version=$(gem_version "$home" "$gem_name" "$version")
   plugin_install "$home" "$gem_name" "$git_clone_params" "install --no-verify"
 }
 
@@ -163,7 +163,7 @@ gem_update () {
   local git_clone_params="$3"
   local version="$4"
   git_check "$home" "$gem_name" "$git_clone_params"
-  version=$(gem_version "$home" "$gem_name" "$version")
+  local version=$(gem_version "$home" "$gem_name" "$version")
   gem_build "$home" "$gem_name" "$version"
   cd $LOGSTASH_HOME
   local action=install

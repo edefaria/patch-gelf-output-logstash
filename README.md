@@ -1,4 +1,4 @@
-# patch logstash 1.5.0
+# patch logstash 1.5.X
 Bash script to patch logsrash 1.5.X to add tcp/tls output gelf support.
 
 To use it:

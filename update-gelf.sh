@@ -193,7 +193,7 @@ plugin_install /opt/logstash-output-gelf logstash-output-gelf "-b feature/tcp-tl
 plugin_install /opt/logstash-codec-gelf logstash-codec-gelf "https://github.com/edefaria/logstash-codec-gelf.git"
 
 # Install logstash plugin input gelf patched
-plugin_install /opt/logstash-input-gelf  logstash- logstash-input-gelf "https://github.com/edefaria/logstash-input-gelf.git"
+plugin_install /opt/logstash-input-gelf logstash-input-gelf "https://github.com/edefaria/logstash-input-gelf.git"
 
 # Update Logstash dependencies
 rake_update

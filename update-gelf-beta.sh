@@ -187,7 +187,7 @@ rubygems_update
 gem_update /opt/gelf-rb gelf "-b feature/tcp-tls --single-branch https://github.com/edefaria/gelf-rb.git"
 
 # Install logstash plugin output gelf patched
-plugin_install /opt/logstash-output-gelf logstash-output-gelf "-b feature/test --single-branch https://github.com/edefaria/logstash-output-gelf.git"
+plugin_install /opt/logstash-output-gelf logstash-output-gelf "-b test --single-branch https://github.com/edefaria/logstash-output-gelf.git"
 
 # Install logstash plugin codec gelf
 #plugin_install /opt/logstash-codec-gelf logstash-codec-gelf "https://github.com/edefaria/logstash-codec-gelf.git"

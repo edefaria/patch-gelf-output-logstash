@@ -195,7 +195,7 @@ plugin_install /opt/logstash-codec-gelf logstash-codec-gelf "https://github.com/
 # Install logstash plugin input gelf patched
 plugin_install /opt/logstash-input-gelf logstash-input-gelf "https://github.com/edefaria/logstash-input-gelf.git"
 
-#Install lo
+#Install logstash plugin output tcp patched for tls
 plugin_install /opt/logstash-output-tcp logstash-output-tcp "https://github.com/michaelweiser/logstash-output-tcp.git"
 
 # Update Logstash dependencies

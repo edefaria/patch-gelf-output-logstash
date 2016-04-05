@@ -33,17 +33,17 @@ rake_update () {
 }
 
 plugin_uninstall () {
-  local gem_name="$1"
+  local name="$1"
   local action="$2"
   cd $LOGSTASH_HOME
   [ -z "$action" ] && local action=uninstall
   if [ -x "bin/plugin" -o -x "bin/logstash-plugin" ] ; then
     if [ -x "bin/logstash-plugin" ] ; then
       echo "exec in $PWD: ( bin/logstash-plugin $action $home/$gem_name-$version.gem )"
-      bin/logstash-plugin $action $home/$gem_name-$version.gem
+      bin/logstash-plugin $action $name
     else
       echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
-      bin/plugin $action $home/$gem_name-$version.gem
+      bin/plugin $action $name
     fi
   else
     echo "Error: plugin exec missing!"

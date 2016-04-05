@@ -131,7 +131,7 @@ plugin_install () {
   cd $LOGSTASH_HOME
   [ -z "$action" ] && local action=install
   if [ -x "bin/plugin" -o -x "bin/logstash-plugin" ] ; then
-    if [ -x "bin/plugin" ]
+    if [ -x "bin/plugin" ] ; then
       echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
       bin/plugin $action $home/$gem_name-$version.gem
     else 

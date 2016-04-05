@@ -37,9 +37,14 @@ plugin_uninstall () {
   local action="$2"
   cd $LOGSTASH_HOME
   [ -z "$action" ] && local action=uninstall
-  if [ -x "bin/plugin" ] ; then
-    echo "exec in $PWD: ( bin/plugin $action $gem_name )"
-    bin/plugin $action $gem_name
+  if [ -x "bin/plugin" -o -x "bin/logstash-plugin" ] ; then
+    if [ -x "bin/logstash-plugin" ] ; then
+      echo "exec in $PWD: ( bin/logstash-plugin $action $home/$gem_name-$version.gem )"
+      bin/logstash-plugin $action $home/$gem_name-$version.gem
+    else
+      echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
+      bin/plugin $action $home/$gem_name-$version.gem
+    fi
   else
     echo "Error: plugin exec missing!"
     exit 1

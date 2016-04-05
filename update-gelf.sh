@@ -131,12 +131,12 @@ plugin_install () {
   cd $LOGSTASH_HOME
   [ -z "$action" ] && local action=install
   if [ -x "bin/plugin" -o -x "bin/logstash-plugin" ] ; then
-    if [ -x "bin/plugin" ] ; then
-      echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
-      bin/plugin $action $home/$gem_name-$version.gem
-    else 
+    if [ -x "bin/logstash-plugin" ] ; then
       echo "exec in $PWD: ( bin/logstash-plugin $action $home/$gem_name-$version.gem )"
       bin/logstash-plugin $action $home/$gem_name-$version.gem
+    else 
+      echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
+      bin/plugin $action $home/$gem_name-$version.gem
     fi
   else
     echo "Error: plugin exec missing!"

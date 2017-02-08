@@ -130,9 +130,9 @@ plugin_install () {
   gem_build "$home" "$gem_name" "$version"
   cd $LOGSTASH_HOME
   [ -z "$action" ] && local action=install
-  if [ -x "bin/plugin" ] ; then
-    echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
-    bin/plugin $action $home/$gem_name-$version.gem
+  if [ -x "bin/logstash-plugin" ] ; then
+    echo "exec in $PWD: ( bin/logstash-plugin $action $home/$gem_name-$version.gem )"
+    bin/logstash-plugin $action $home/$gem_name-$version.gem
   else
     echo "Error: plugin exec missing!"
     exit 1
@@ -183,17 +183,8 @@ gem_update () {
 # Check rubygems version requirement
 rubygems_update
 
-# Install gelf-rb patched
-gem_update /opt/gelf-rb gelf "-b feature/tcp-tls --single-branch https://github.com/edefaria/gelf-rb.git"
-
-# Install logstash plugin output gelf patched
-plugin_install /opt/logstash-output-gelf logstash-output-gelf "-b test --single-branch https://github.com/edefaria/logstash-output-gelf.git"
-
 # Install logstash plugin codec gelf
-#plugin_install /opt/logstash-codec-gelf logstash-codec-gelf "https://github.com/edefaria/logstash-codec-gelf.git"
-
-# Install logstash plugin input gelf patched
-#plugin_install /opt/logstash-input-gelf logstash-input-gelf "https://github.com/edefaria/logstash-input-gelf.git"
+plugin_install /opt/logstash-codec-gelf logstash-codec-gelf "https://github.com/edefaria/logstash-codec-gelf.git"
 
 # Update Logstash dependencies
 rake_update

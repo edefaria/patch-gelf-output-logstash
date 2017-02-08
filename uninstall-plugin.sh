@@ -39,10 +39,10 @@ plugin_uninstall () {
   [ -z "$action" ] && local action=uninstall
   if [ -x "bin/plugin" -o -x "bin/logstash-plugin" ] ; then
     if [ -x "bin/logstash-plugin" ] ; then
-      echo "exec in $PWD: ( bin/logstash-plugin $action $home/$gem_name-$version.gem )"
+      echo "exec in $PWD: ( bin/logstash-plugin $action $name )"
       bin/logstash-plugin $action $name
     else
-      echo "exec in $PWD: ( bin/plugin $action $home/$gem_name-$version.gem )"
+      echo "exec in $PWD: ( bin/plugin $action $name )"
       bin/plugin $action $name
     fi
   else
@@ -59,10 +59,10 @@ gem_uninstall () {
   if [ -d "vendor/jar" ] ; then
     local vendor_path=$(find vendor/jar -iname jruby-complete*.jar)
     echo "exec in $PWD: java -jar $vendor_path -S gem $action -i $GEM_HOME $gem_name"
-    java -jar $vendor_path -S gem $action -i $GEM_HOME $gem_name || { echo "gem install failed" ; exit 1 ; }
+    java -jar $vendor_path -S gem $action -i $GEM_HOME $gem_name || { echo "gem uninstall failed" ; exit 1 ; }
   elif [ -d "vendor/jruby" ] ; then
     echo "exec in $PWD: ./vendor/jruby/bin/jruby -S gem $action $gem_name"
-    ./vendor/jruby/bin/jruby -S gem $action $gem_name || { echo "gem install failed" ; exit 1 ; }
+    ./vendor/jruby/bin/jruby -S gem $action $gem_name || { echo "gem uninstall failed" ; exit 1 ; }
   else
     echo "Error: jruby dependancy missing!"
     exit 1
@@ -70,7 +70,7 @@ gem_uninstall () {
 }
 
 # Uninstall some logstash plugin
-for plugin in logstash-input-exec logstash-output-exec logstash-input-file logstash-output-file logstash-input-pipe logstash-output-pipe logstash-input-unix logstash-filter-ruby
+for plugin in logstash-input-exec logstash-output-exec logstash-input-file logstash-output-csv logstash-output-file logstash-input-pipe logstash-output-pipe logstash-output-graphite logstash-input-unix logstash-filter-ruby
 do
   plugin_uninstall $plugin
 done

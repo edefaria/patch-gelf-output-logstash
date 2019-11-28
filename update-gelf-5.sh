@@ -8,7 +8,7 @@ export GEM_HOME=vendor/bundle/jruby/1.9
 export GEM_PATH=$GEN_HOME
 export USE_JRUBY=1
 
-if [ -z "$GIT_PULL" ]
+if [ -z "$GIT_PULL" ] ; then
   GIT_PULL=1
 fi
 
